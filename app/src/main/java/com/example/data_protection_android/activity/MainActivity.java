@@ -1,10 +1,15 @@
 package com.example.data_protection_android.activity;
 
+import android.content.Intent;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.data_protection_android.R;
@@ -16,6 +21,9 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class MainActivity extends AppCompatActivity {
+
+    private final static String TAG = "jija";
+    private final int FILE_REQUEST_CODE = 1;
 
     @BindView(R.id.tv_chosen_file)
     TextView chosenFileTv;
@@ -35,7 +43,9 @@ public class MainActivity extends AppCompatActivity {
 
     @OnClick(R.id.btn_choose_file)
     public void chooseFile() {
-
+        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+        intent.setType("file/*");
+        startActivityForResult(intent, FILE_REQUEST_CODE);
     }
 
     @OnClick(R.id.btn_start)
@@ -70,7 +80,20 @@ public class MainActivity extends AppCompatActivity {
         if (method != null && action != null) {
 
         } else {
-            Toast.makeText(this, "choose all info!", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, getString(R.string.choose_all_info_alert), Toast.LENGTH_LONG).show();
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (requestCode) {
+            case FILE_REQUEST_CODE:
+                if (resultCode == RESULT_OK) {
+                    Uri uri = data.getData();
+                    chosenFileTv.setText(uri.getPath());
+                }
+                break;
         }
     }
 }

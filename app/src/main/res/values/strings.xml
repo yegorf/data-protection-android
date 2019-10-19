@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">data-protection-android</string>
+    <string name="choose_all_info_alert">choose all info!</string>
 </resources>
