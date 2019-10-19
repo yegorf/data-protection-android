@@ -9,7 +9,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="DATA PROTECTION"
+        android:text="@string/main_header"
         android:textSize="22sp"
         android:gravity="center"
         android:layout_marginBottom="50dp"/>
@@ -25,7 +25,7 @@
             android:id="@+id/btn_choose_file"
             android:layout_width="180dp"
             android:layout_height="wrap_content"
-            android:text="choose file"
+            android:text="@string/choose_file_label"
             android:layout_gravity="center"/>
 
         <TextView
@@ -39,7 +39,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="choose method"
+            android:text="@string/choose_method_label"
             android:layout_gravity="center"
             android:layout_marginTop="30dp"/>
 
@@ -55,34 +55,34 @@
                 android:id="@+id/rb_haffman"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="haffman" />
+                android:text="@string/haffman" />
 
             <RadioButton
                 android:id="@+id/rb_lzw"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="lzw"/>
+                android:text="@string/lzw"/>
 
 
             <RadioButton
                 android:id="@+id/rb_aes"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="aes"/>
+                android:text="@string/aes"/>
 
 
             <RadioButton
                 android:id="@+id/rb_rsa"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="rsa"/>
+                android:text="@string/rsa"/>
 
         </RadioGroup>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="choose action"
+            android:text="@string/choose_action_label"
             android:layout_gravity="center"
             android:layout_marginTop="30dp"/>
 
@@ -97,14 +97,14 @@
                 android:id="@+id/rb_encrypt"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="encrypt"
+                android:text="@string/encrypt"
                 />
 
             <RadioButton
                 android:id="@+id/rb_decrypt"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="decrypt"
+                android:text="@string/decrypt"
                 />
 
         </RadioGroup>
@@ -115,7 +115,7 @@
         android:id="@+id/btn_start"
         android:layout_width="180dp"
         android:layout_height="wrap_content"
-        android:text="start"
+        android:text="@string/start_btn_text"
         android:layout_gravity="center"
         android:layout_marginTop="30dp"/>
 

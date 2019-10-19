@@ -1,4 +1,15 @@
 <resources>
     <string name="app_name">data-protection-android</string>
     <string name="choose_all_info_alert">choose all info!</string>
+    <string name="main_header">DATA PROTECTION</string>
+    <string name="choose_file_label">choose file</string>
+    <string name="choose_method_label">choose method</string>
+    <string name="choose_action_label">choose action</string>
+    <string name="start_btn_text">start</string>
+    <string name="haffman">haffman</string>
+    <string name="lzw">lzw</string>
+    <string name="aes">aes</string>
+    <string name="rsa">rsa</string>
+    <string name="encrypt">encrypt</string>
+    <string name="decrypt">decrypt</string>
 </resources>
