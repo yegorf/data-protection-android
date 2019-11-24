@@ -12,4 +12,5 @@
     <string name="rsa">rsa</string>
     <string name="encrypt">encrypt</string>
     <string name="decrypt">decrypt</string>
+    <string name="demo_file">DEMO FILE</string>
 </resources>

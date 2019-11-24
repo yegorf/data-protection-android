@@ -14,27 +14,39 @@
         android:gravity="center"
         android:layout_marginBottom="50dp"/>
 
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:layout_gravity="center">
 
-        <Button
-            android:id="@+id/btn_choose_file"
-            android:layout_width="180dp"
+        <LinearLayout
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/choose_file_label"
-            android:layout_gravity="center"/>
+            android:orientation="horizontal"
+            android:layout_gravity="center">
+
+            <Button
+                android:id="@+id/btn_choose_file"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/choose_file_label"
+                android:layout_gravity="center"/>
+
+            <Button
+                android:id="@+id/btn_demo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/demo_file" />
+
+        </LinearLayout>
 
         <TextView
             android:id="@+id/tv_chosen_file"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="file path"
-            android:layout_gravity="center"/>
-
+            android:layout_gravity="center"
+            android:text="file path" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -48,8 +60,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_gravity="center"
-            >
+            android:layout_gravity="center">
 
             <RadioButton
                 android:id="@+id/rb_haffman"
@@ -97,15 +108,13 @@
                 android:id="@+id/rb_encrypt"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/encrypt"
-                />
+                android:text="@string/encrypt" />
 
             <RadioButton
                 android:id="@+id/rb_decrypt"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/decrypt"
-                />
+                android:text="@string/decrypt" />
 
         </RadioGroup>
 

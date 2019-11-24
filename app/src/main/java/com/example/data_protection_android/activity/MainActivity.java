@@ -1,10 +1,8 @@
 package com.example.data_protection_android.activity;
 
 import android.content.Intent;
-import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -16,14 +14,17 @@ import com.example.data_protection_android.R;
 import com.example.data_protection_android.util.Action;
 import com.example.data_protection_android.util.Method;
 
+import java.io.IOException;
+import java.io.InputStream;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class MainActivity extends AppCompatActivity {
 
-    private final static String TAG = "jija";
     private final int FILE_REQUEST_CODE = 1;
+    private final String DEMO_FILE = "demo.txt";
 
     @BindView(R.id.tv_chosen_file)
     TextView chosenFileTv;
@@ -48,10 +49,20 @@ public class MainActivity extends AppCompatActivity {
         startActivityForResult(intent, FILE_REQUEST_CODE);
     }
 
+    @OnClick(R.id.btn_demo)
+    public void chooseDemo() {
+        chosenFileTv.setText(DEMO_FILE);
+        try {
+            InputStream stream = getAssets().open(DEMO_FILE);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     @OnClick(R.id.btn_start)
     public void start() {
-        String method = null;
-        String action = null;
+        Action action = null;
+        Method method = null;
 
         switch (methodRg.getCheckedRadioButtonId()) {
             case R.id.rb_haffman:
@@ -86,7 +97,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
+        super.onActivityResult(requestCode,  resultCode, data);
         switch (requestCode) {
             case FILE_REQUEST_CODE:
                 if (resultCode == RESULT_OK) {
