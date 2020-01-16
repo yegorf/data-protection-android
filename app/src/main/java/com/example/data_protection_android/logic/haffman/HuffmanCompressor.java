@@ -12,12 +12,10 @@ import java.util.PriorityQueue;
 public class HuffmanCompressor {
 
     public static Node compress(String inputFilename, String outputFilename) {
-
         try (
                 RandomAccessFile file = new RandomAccessFile(inputFilename, "r");
                 BufferedOutputStream bufferedWriter = new BufferedOutputStream(new FileOutputStream(outputFilename))
         ) {
-
             PriorityQueue<Node> nodes = new PriorityQueue<>(
                     (o1, o2) -> {
                         if (o1.getCount() > o2.getCount()) {
@@ -58,11 +56,7 @@ public class HuffmanCompressor {
             generateCodes(node, codes, "");
             file.seek(0);
             System.out.println("Печатает в файл");
-            /*while (file.getFilePointer() < file.length()) {
-                byte b = file.readByte();
-                bufferedWriter.write(codes.get(b).getBytes());
-            }
-*/
+
             StringBuilder bits = new StringBuilder();
             while (file.getFilePointer() < file.length()) {
                 byte b;
@@ -88,7 +82,6 @@ public class HuffmanCompressor {
             return null;
         }
     }
-
 
     private static void generateCodes(Node node, Map<Byte, String> codes, String s) {
         if (node != null) {
@@ -125,7 +118,6 @@ public class HuffmanCompressor {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
     }
 
     private static byte getByteFromCode(StringBuilder builder, Node tree, RandomAccessFile reader) throws IOException {
