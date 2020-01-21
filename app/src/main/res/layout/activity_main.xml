@@ -6,98 +6,140 @@
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <Button
-        android:id="@+id/btn_start"
-        android:layout_width="180dp"
+    <LinearLayout
+        android:layout_width="260dp"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginBottom="28dp"
-        android:text="@string/start_btn_text"
-        app:layout_constraintBottom_toTopOf="@+id/textView"
+        android:layout_marginTop="16dp"
+        android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <LinearLayout
-        android:id="@+id/linearLayout"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:orientation="horizontal"
         app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginStart="10dp">
+        app:layout_constraintTop_toBottomOf="@+id/tv_chosen_file">
+
+        <Button
+            android:id="@+id/btn_start"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_gravity="center"
+            android:background="@drawable/main_button"
+            android:text="@string/start_btn_text"
+            android:textColor="@android:color/white"
+            android:textSize="20sp" />
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="20dp" />
 
         <Button
             android:id="@+id/btn_choose_file"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
             android:layout_gravity="center"
-            android:text="@string/choose_file_label" />
+            android:background="@drawable/main_button"
+            android:text="@string/choose_file_label"
+            android:textColor="@android:color/white"
+            android:textSize="20sp" />
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="20dp" />
 
         <Button
-            android:id="@+id/btn_demo"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/demo_file" />
+            android:id="@+id/btn_info"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_gravity="center"
+            android:background="@drawable/main_button"
+            android:text="@string/info"
+            android:textColor="@android:color/white"
+            android:textSize="20sp" />
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="20dp" />
+
+        <Button
+            android:id="@+id/btn_exit"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_gravity="center"
+            android:background="@drawable/main_button"
+            android:text="@string/exit"
+            android:textColor="@android:color/white"
+            android:textSize="20sp" />
 
     </LinearLayout>
 
     <TextView
         android:id="@+id/tv_chosen_file"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:layout_marginStart="10dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout"
-        tools:text="demo.txt" />
+        android:text="@string/file_not_chosen"
+        android:textColor="@android:color/black"
+        android:background="@drawable/file_banner" />
 
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:text="@string/choose_method_label"
-        app:layout_constraintBottom_toTopOf="@+id/rg_method"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <RadioGroup
-        android:id="@+id/rg_method"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:orientation="horizontal"
+        android:background="@drawable/choose_panel"
+        android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="10dp">
 
-        <RadioButton
-            android:id="@+id/rb_haffman"
+        <TextView
+            android:id="@+id/textView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/haffman" />
+            android:layout_gravity="center"
+            android:text="@string/choose_method_label"
+            android:textColor="@android:color/white"
+            android:textSize="24sp" />
 
-        <RadioButton
-            android:id="@+id/rb_lzw"
+        <RadioGroup
+            android:id="@+id/rg_method"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/lzw" />
+            android:layout_gravity="center"
+            android:layout_marginBottom="20dp"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/rb_haffman"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/haffman"
+                android:textColor="@android:color/white"/>
 
 
-        <RadioButton
-            android:id="@+id/rb_aes"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/aes" />
+            <RadioButton
+                android:id="@+id/rb_lzw"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/lzw"
+                android:textColor="@android:color/white"/>
 
-        <RadioButton
-            android:id="@+id/rb_rsa"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/rsa" />
+            <RadioButton
+                android:id="@+id/rb_aes"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/aes"
+                android:textColor="@android:color/white"/>
 
-    </RadioGroup>
+            <RadioButton
+                android:id="@+id/rb_rsa"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/rsa"
+                android:textColor="@android:color/white"/>
+
+        </RadioGroup>
+
+    </LinearLayout>
 
     <FrameLayout
         android:id="@+id/fragment_container"

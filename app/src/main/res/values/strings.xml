@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">data-protection-android</string>
+    <string name="app_name">Data Protection</string>
     <string name="choose_all_info_alert">choose all info!</string>
     <string name="main_header">DATA PROTECTION</string>
     <string name="choose_file_label">choose file</string>
@@ -13,4 +13,7 @@
     <string name="encrypt">encrypt</string>
     <string name="decrypt">decrypt</string>
     <string name="demo_file">DEMO FILE</string>
+    <string name="file_not_chosen">file not chosen</string>
+    <string name="exit">exit</string>
+    <string name="info">info</string>
 </resources>

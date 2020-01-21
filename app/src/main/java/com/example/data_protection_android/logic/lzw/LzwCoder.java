@@ -1,6 +1,13 @@
 package com.example.data_protection_android.logic.lzw;
 
-import java.io.*;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.EOFException;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -64,11 +71,9 @@ public class LzwCoder {
         return archive;
     }
 
-    public void unzip(String fileName, String archive) throws IOException {
-
+    public String unzip(String fileName, String archive) throws IOException {
         String[] split = fileName.split("/");
         String file = split[split.length - 1];
-
 
         String output = fileName.replace(file, "new-" + file);
         DataInputStream inputStream = new DataInputStream(new BufferedInputStream(new FileInputStream(archive)));
@@ -81,7 +86,6 @@ public class LzwCoder {
 
         int firstString;
         int secondString;
-
         boolean neof = true;
 
         StringBuilder binBuffer = new StringBuilder();
@@ -89,7 +93,6 @@ public class LzwCoder {
         read(binBuffer, inputStream);
 
         firstString = getNum(binBuffer);
-
         outputStream.writeBytes(vocabulary.get(firstString));
 
         while (neof) {
@@ -123,6 +126,8 @@ public class LzwCoder {
 
         inputStream.close();
         outputStream.close();
+
+        return output;
     }
 
     private char getChar(Byte b) {

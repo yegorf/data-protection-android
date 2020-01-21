@@ -88,11 +88,9 @@ public class HuffmanCompressor {
             if (node.getRight() != null) {
                 generateCodes(node.getRight(), codes, s + "1");
             }
-
             if (node.getLeft() != null) {
                 generateCodes(node.getLeft(), codes, s + "0");
             }
-
             if (node.getLeft() == null && node.getRight() == null) {
                 codes.put(node.get_byte(), s);
                 System.out.println((char)node.get_byte() + " : " + s);
@@ -121,7 +119,6 @@ public class HuffmanCompressor {
     }
 
     private static byte getByteFromCode(StringBuilder builder, Node tree, RandomAccessFile reader) throws IOException {
-
         if(builder.length() == 0) {
             byte b = reader.readByte();
             builder.append(BitUtils.byteToBits(b));

@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.util.Optional;
 
 public class CompressQualifier {
+
     public static double compressPercent(File source, File compressed) {
         return 100 - ((double)compressed.length() / (double)source.length() * 100.0);
     }

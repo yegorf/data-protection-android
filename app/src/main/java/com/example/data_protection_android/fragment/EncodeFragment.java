@@ -13,11 +13,8 @@ import com.example.data_protection_android.logic.haffman.Node;
 import com.example.data_protection_android.logic.lzw.LzwCoder;
 import com.example.data_protection_android.util.Method;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
-import java.io.InputStream;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -32,9 +29,6 @@ public class EncodeFragment extends Fragment {
 
     @BindView(R.id.tv_method)
     TextView methodTv;
-
-    @BindView(R.id.tv_file)
-    TextView fileTv;
 
     private static final String FILE_PATH_KEY = "FILE_PATH_KEY";
     private static final String METHOD_KEY = "METHOD_KEY";
@@ -76,54 +70,48 @@ public class EncodeFragment extends Fragment {
     }
 
     private void setData(String file, Method method) {
-        fileTv.setText(file);
         methodTv.setText(method.name());
     }
 
     private void start(String file, Method method) throws IOException {
-        StringBuilder builder;
         switch (method) {
             case HAFFMAN:
                 Node tree;
-                builder = new StringBuilder();
 
-                String textFilename = file;
                 String compressedTextFilename = file + ".haffman";
                 String decodedTextFilename = file.substring(file.indexOf('.')) + "_decoded.txt";
 
-                builder.append("Кодирование текстового файла\n");
-                builder.append("----------------------------\n");
+                addProgressText("Кодирование файла: " + file + "\n");
+                tree = HuffmanCompressor.compress(file, compressedTextFilename);
 
-                tree = HuffmanCompressor.compress(textFilename, compressedTextFilename);
-                builder.append("----------------------------\n");
-                builder.append("Раскодирование текстового файла\n");
-                builder.append("----------------------------\n");
+                addProgressText("Архив создан: " + compressedTextFilename);
+                addProgressText("Раскодирование файла\n");
 
                 HuffmanCompressor.decompress(compressedTextFilename, decodedTextFilename, tree);
 
-                builder.append("% компрессии = " + CompressQualifier.compressPercent(
-                        new File(textFilename),
+                addProgressText("% компрессии = " + CompressQualifier.compressPercent(
+                        new File(file),
                         new File(compressedTextFilename)) + "\n");
-                builder.append("Файлы идентичны = " + CompressQualifier.isUncompressedEqualsSource(
-                        new File(textFilename),
+                addProgressText("Файлы идентичны = " + CompressQualifier.isUncompressedEqualsSource(
+                        new File(file),
                         new File(decodedTextFilename)) + "\n");
 
-                progressTv.setText(builder.toString());
                 break;
             case LZW:
-                builder = new StringBuilder();
                 LzwCoder coder = new LzwCoder();
-
-                //File f = new File(file);
-                BufferedReader br = new BufferedReader(new FileReader(file));
-                builder.append("Архивация LZW");
+                addProgressText("Архивация LZW");
                 String archive = coder.archive(file);
+                addProgressText("Архив создан: " + archive);
 
-                builder.append("Дерхивация LZW");
-                coder.unzip(file, archive);
+                addProgressText("Дерхивация LZW");
+                String newFile = coder.unzip(file, archive);
 
-                progressTv.setText(builder.toString());
+                addProgressText("Разархивированный файл: " + newFile);
                 break;
         }
+    }
+
+    private void addProgressText(String text) {
+        progressTv.setText(progressTv.getText() + "\n" + text + "\n");
     }
 }
