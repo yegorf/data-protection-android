@@ -1,5 +1,7 @@
 package com.example.data_protection_android.logic.haffman;
 
+import com.example.data_protection_android.fragment.EncodeListener;
+
 import java.io.BufferedOutputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -11,7 +13,7 @@ import java.util.PriorityQueue;
 
 public class HuffmanCompressor {
 
-    public static Node compress(String inputFilename, String outputFilename) {
+    public static Node compress(String inputFilename, String outputFilename, EncodeListener listener) {
         try (
                 RandomAccessFile file = new RandomAccessFile(inputFilename, "r");
                 BufferedOutputStream bufferedWriter = new BufferedOutputStream(new FileOutputStream(outputFilename))
@@ -28,21 +30,23 @@ public class HuffmanCompressor {
             );
 
             Map<Byte, Integer> byteIntegerMap = new HashMap<>();
-            System.out.println("Считает символы");
+            listener.displayInfo("Считаем символы");
             while (file.getFilePointer() < file.length()) {
                 final byte read = file.readByte();
                 if (nodes
                         .stream()
-                        .noneMatch(characterCount ->
-                                read == characterCount.get_byte())
+                        .noneMatch(characterCount -> read == characterCount.get_byte())
                 ) {
                     byteIntegerMap.merge(read, 1, Integer::sum);
                 }
             }
 
             byteIntegerMap.forEach((key, value) -> nodes.add(new Node(key, value)));
+            nodes.forEach((node -> {
+                listener.displayInfo(node.getName() + " -> " + node.getCount());
+            }));
 
-            System.out.println("Формирует дерево");
+            listener.displayInfo("\nФормируем дерево");
             while (nodes.size() > 1) {
                 Node left = nodes.poll();
                 Node right = nodes.poll();
@@ -52,10 +56,10 @@ public class HuffmanCompressor {
             Map<Byte, String> codes = new HashMap<>();
 
             Node node = nodes.poll();
-            System.out.println("Генерирует коды");
+            listener.displayInfo("\nГенерируем коды");
             generateCodes(node, codes, "");
             file.seek(0);
-            System.out.println("Печатает в файл");
+            listener.displayInfo("\nПечатаем в файл");
 
             StringBuilder bits = new StringBuilder();
             while (file.getFilePointer() < file.length()) {

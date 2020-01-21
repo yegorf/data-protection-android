@@ -1,5 +1,7 @@
 package com.example.data_protection_android.logic.lzw;
 
+import com.example.data_protection_android.fragment.EncodeListener;
+
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.DataInputStream;
@@ -29,7 +31,7 @@ public class LzwCoder {
         outputStream.close();
     }
 
-    public String archive(String fileName) throws IOException {
+    public String archive(String fileName, EncodeListener listener) throws IOException {
         String archive = fileName + ".lzw";
         DataInputStream inputStream = new DataInputStream(new BufferedInputStream(new FileInputStream(fileName)));
 
@@ -61,6 +63,7 @@ public class LzwCoder {
                 if (count < MAX_SIZE) {
                     charBuffer.append(symbol);
                     vocabulary.put(charBuffer.toString(), count);
+                    listener.displayInfo(charBuffer.toString() + " -> " + count);
                     count++;
                 }
                 charBuffer = new StringBuilder((String.valueOf(symbol)));
@@ -75,7 +78,7 @@ public class LzwCoder {
         String[] split = fileName.split("/");
         String file = split[split.length - 1];
 
-        String output = fileName.replace(file, "new-" + file);
+        String output = fileName.replace(file, "decoded_" + file);
         DataInputStream inputStream = new DataInputStream(new BufferedInputStream(new FileInputStream(archive)));
         DataOutputStream outputStream = new DataOutputStream(new BufferedOutputStream(new FileOutputStream(output)));
 

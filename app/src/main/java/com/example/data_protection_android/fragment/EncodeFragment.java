@@ -22,7 +22,7 @@ import androidx.fragment.app.Fragment;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class EncodeFragment extends Fragment {
+public class EncodeFragment extends Fragment implements EncodeListener {
 
     @BindView(R.id.tv_progress)
     TextView progressTv;
@@ -58,7 +58,7 @@ public class EncodeFragment extends Fragment {
         }
 
         if (file != null && method != null) {
-            setData(file, method);
+            setData(method);
             try {
                 start(file, method);
             } catch (IOException e) {
@@ -69,7 +69,7 @@ public class EncodeFragment extends Fragment {
         return view;
     }
 
-    private void setData(String file, Method method) {
+    private void setData(Method method) {
         methodTv.setText(method.name());
     }
 
@@ -79,28 +79,32 @@ public class EncodeFragment extends Fragment {
                 Node tree;
 
                 String compressedTextFilename = file + ".haffman";
-                String decodedTextFilename = file.substring(file.indexOf('.')) + "_decoded.txt";
+
+                String[] split = file.split("/");
+                String lastFile = split[split.length - 1];
+                String decodedTextFilename = file.replace(lastFile, "decoded_" + lastFile);
 
                 addProgressText("Кодирование файла: " + file + "\n");
-                tree = HuffmanCompressor.compress(file, compressedTextFilename);
+                tree = HuffmanCompressor.compress(file, compressedTextFilename, this);
 
                 addProgressText("Архив создан: " + compressedTextFilename);
                 addProgressText("Раскодирование файла\n");
 
                 HuffmanCompressor.decompress(compressedTextFilename, decodedTextFilename, tree);
 
+                addProgressText("Разархивированный файл: " + decodedTextFilename);
                 addProgressText("% компрессии = " + CompressQualifier.compressPercent(
                         new File(file),
                         new File(compressedTextFilename)) + "\n");
-                addProgressText("Файлы идентичны = " + CompressQualifier.isUncompressedEqualsSource(
-                        new File(file),
-                        new File(decodedTextFilename)) + "\n");
+//                addProgressText("Файлы идентичны = " + CompressQualifier.isUncompressedEqualsSource(
+//                        new File(file),
+//                        new File(decodedTextFilename)) + "\n");
 
                 break;
             case LZW:
                 LzwCoder coder = new LzwCoder();
                 addProgressText("Архивация LZW");
-                String archive = coder.archive(file);
+                String archive = coder.archive(file, this);
                 addProgressText("Архив создан: " + archive);
 
                 addProgressText("Дерхивация LZW");
@@ -112,6 +116,11 @@ public class EncodeFragment extends Fragment {
     }
 
     private void addProgressText(String text) {
-        progressTv.setText(progressTv.getText() + "\n" + text + "\n");
+        progressTv.setText(progressTv.getText()+ text + "\n");
+    }
+
+    @Override
+    public void displayInfo(String text) {
+        addProgressText(text);
     }
 }
