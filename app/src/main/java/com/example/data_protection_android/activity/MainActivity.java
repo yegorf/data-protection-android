@@ -16,6 +16,8 @@ import android.widget.Toast;
 
 import com.example.data_protection_android.R;
 import com.example.data_protection_android.fragment.EncodeFragment;
+import com.example.data_protection_android.fragment.InfoFragment;
+import com.example.data_protection_android.util.Action;
 import com.example.data_protection_android.util.Method;
 
 import java.net.URISyntaxException;
@@ -53,11 +55,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void requestPermissions() {
-        String permission = "";
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)
                 != PackageManager.PERMISSION_GRANTED) {
-            permission += "read";
-
             ActivityCompat.requestPermissions(this,
                     new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, WRITE_PERMISSION);
 
@@ -65,15 +64,9 @@ public class MainActivity extends AppCompatActivity {
 
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 != PackageManager.PERMISSION_GRANTED) {
-            permission += "write";
-
             ActivityCompat.requestPermissions(this,
                     new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, WRITE_PERMISSION);
 
-        }
-
-        if (!permission.isEmpty()) {
-            Toast.makeText(this, permission, Toast.LENGTH_LONG).show();
         }
     }
 
@@ -96,8 +89,12 @@ public class MainActivity extends AppCompatActivity {
         startActivityForResult(intent, FILE_REQUEST_CODE);
     }
 
-    @OnClick(R.id.btn_start)
-    public void start() {
+    @OnClick(R.id.btn_info)
+    public void info() {
+        startInfoFragment();
+    }
+
+    private void startFragment(Action action) {
         Method method = null;
 
         switch (methodRg.getCheckedRadioButtonId()) {
@@ -117,18 +114,42 @@ public class MainActivity extends AppCompatActivity {
 
         String file = chosenFileTv.getText().toString();
         if (method != null && file.length() != 0) {
-            startFragment(file, method);
+            startFragment(file, method, action);
         } else {
             Toast.makeText(this, getString(R.string.choose_all_info_alert), Toast.LENGTH_LONG).show();
         }
     }
 
-    private void startFragment(String file, Method method) {
-        EncodeFragment fragment = EncodeFragment.newInstance(file, method);
+    @OnClick(R.id.btn_start)
+    public void start() {
+        startFragment(Action.DEMO);
+    }
+
+    @OnClick(R.id.btn_encrypt)
+    public void encrypt() {
+        startFragment(Action.ENCRYPT);
+    }
+
+    @OnClick(R.id.btn_decrypt)
+    public void decrypt() {
+        startFragment(Action.DECRYPT);
+    }
+
+    private void startFragment(String file, Method method, Action action) {
+        EncodeFragment fragment = EncodeFragment.newInstance(file, method, action);
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction()
                 .replace(R.id.fragment_container, fragment)
                 .addToBackStack("ENCODE_FRAGMENT")
+                .commit();
+    }
+
+    private void startInfoFragment() {
+        InfoFragment fragment = new InfoFragment();
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, fragment)
+                .addToBackStack("INFO_FRAGMENT")
                 .commit();
     }
 
