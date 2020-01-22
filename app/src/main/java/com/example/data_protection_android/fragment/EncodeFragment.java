@@ -7,14 +7,15 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.data_protection_android.R;
 import com.example.data_protection_android.logic.aes.AES;
-import com.example.data_protection_android.logic.haffman.CompressQualifier;
 import com.example.data_protection_android.logic.haffman.HuffmanCompressor;
 import com.example.data_protection_android.logic.haffman.Node;
 import com.example.data_protection_android.logic.lzw.LzwCoder;
 import com.example.data_protection_android.logic.rsa.RSA;
+import com.example.data_protection_android.util.Action;
 import com.example.data_protection_android.util.Method;
 
 import java.io.File;
@@ -54,13 +55,17 @@ public class EncodeFragment extends Fragment implements EncodeListener {
 
     private static final String FILE_PATH_KEY = "FILE_PATH_KEY";
     private static final String METHOD_KEY = "METHOD_KEY";
-    private Method method;
+    private static final String ACTION_KEY = "ACTION_KEY";
 
-    public static EncodeFragment newInstance(String path, Method method) {
+    private Method method;
+    private Action action;
+
+    public static EncodeFragment newInstance(String path, Method method, Action action) {
         EncodeFragment fragment = new EncodeFragment();
         Bundle args = new Bundle();
         args.putString(FILE_PATH_KEY, path);
         args.putSerializable(METHOD_KEY, method);
+        args.putSerializable(ACTION_KEY, action);
         fragment.setArguments(args);
         return fragment;
     }
@@ -76,10 +81,12 @@ public class EncodeFragment extends Fragment implements EncodeListener {
         if (bundle != null) {
             file = bundle.getString(FILE_PATH_KEY);
             method = (Method) bundle.getSerializable(METHOD_KEY);
+            action = (Action) bundle.getSerializable(ACTION_KEY);
+            Toast.makeText(getContext(), action.name(), Toast.LENGTH_LONG).show();
         }
 
         if (file != null && method != null) {
-            setData(method);
+            setData(method, action);
             try {
                 start(file, method);
             } catch (IOException e) {
@@ -90,8 +97,8 @@ public class EncodeFragment extends Fragment implements EncodeListener {
         return view;
     }
 
-    private void setData(Method method) {
-        methodTv.setText(method.name());
+    private void setData(Method method, Action action) {
+        methodTv.setText(method.name() + " " + action.name());
     }
 
     private void start(String file, Method method) throws IOException {
@@ -114,7 +121,7 @@ public class EncodeFragment extends Fragment implements EncodeListener {
                 HuffmanCompressor.decompress(compressedTextFilename, decodedTextFilename, tree);
 
                 addProgressText("Разархивированный файл: " + decodedTextFilename);
-                addProgressText("% компрессии = " + CompressQualifier.compressPercent(
+                addProgressText("% компрессии = " + HuffmanCompressor.compressPercent(
                         new File(file),
                         new File(compressedTextFilename)) + "\n");
 
@@ -130,10 +137,9 @@ public class EncodeFragment extends Fragment implements EncodeListener {
 
                 addProgressText("Разархивированный файл: " + newFile);
                 break;
-            case AES:
-                inputSection.setVisibility(View.VISIBLE);
-                break;
             case RSA:
+                keySection.setVisibility(View.GONE);
+            case AES:
                 inputSection.setVisibility(View.VISIBLE);
                 break;
         }
@@ -148,7 +154,6 @@ public class EncodeFragment extends Fragment implements EncodeListener {
         if (method == Method.AES) {
             testAES(key, text);
         } else {
-            keySection.setVisibility(View.GONE);
             try {
                 testRSA(text);
             } catch (Exception e) {
@@ -193,7 +198,7 @@ public class EncodeFragment extends Fragment implements EncodeListener {
     }
 
     private void addProgressText(String text) {
-        progressTv.setText(progressTv.getText()+ text + "\n");
+        progressTv.setText(progressTv.getText() + text + "\n");
     }
 
     private void clearProgress() {

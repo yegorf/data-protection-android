@@ -41,39 +41,23 @@ public class Node implements Comparable<Node> {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
 
     public byte get_byte() {
         return _byte;
     }
 
-    public void set_byte(byte _byte) {
-        this._byte = _byte;
-    }
 
     public int getCount() {
         return count;
     }
 
-    public void setCount(int count) {
-        this.count = count;
-    }
 
     public Node getLeft() {
         return left;
     }
 
-    public void setLeft(Node left) {
-        this.left = left;
-    }
 
     public Node getRight() {
         return right;
-    }
-
-    public void setRight(Node right) {
-        this.right = right;
     }
 }
