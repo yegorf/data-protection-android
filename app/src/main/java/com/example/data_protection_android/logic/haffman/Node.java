@@ -7,10 +7,6 @@ public class Node implements Comparable<Node> {
     private Node left;
     private Node right;
 
-    public Node() {
-
-    }
-
     public Node(byte _byte, int count) {
         this.count = count;
         this._byte = _byte;

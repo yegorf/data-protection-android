@@ -4,23 +4,33 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.data_protection_android.R;
+import com.example.data_protection_android.logic.aes.AES;
 import com.example.data_protection_android.logic.haffman.CompressQualifier;
 import com.example.data_protection_android.logic.haffman.HuffmanCompressor;
 import com.example.data_protection_android.logic.haffman.Node;
 import com.example.data_protection_android.logic.lzw.LzwCoder;
+import com.example.data_protection_android.logic.rsa.RSA;
 import com.example.data_protection_android.util.Method;
 
 import java.io.File;
 import java.io.IOException;
+import java.security.KeyPair;
+import java.security.KeyPairGenerator;
+import java.security.PrivateKey;
+import java.security.PublicKey;
+import java.util.Base64;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class EncodeFragment extends Fragment implements EncodeListener {
 
@@ -30,8 +40,21 @@ public class EncodeFragment extends Fragment implements EncodeListener {
     @BindView(R.id.tv_method)
     TextView methodTv;
 
+    @BindView(R.id.input_section)
+    LinearLayout inputSection;
+
+    @BindView(R.id.key_section)
+    LinearLayout keySection;
+
+    @BindView(R.id.et_key)
+    EditText keyEt;
+
+    @BindView(R.id.et_text)
+    EditText textEt;
+
     private static final String FILE_PATH_KEY = "FILE_PATH_KEY";
     private static final String METHOD_KEY = "METHOD_KEY";
+    private Method method;
 
     public static EncodeFragment newInstance(String path, Method method) {
         EncodeFragment fragment = new EncodeFragment();
@@ -49,8 +72,6 @@ public class EncodeFragment extends Fragment implements EncodeListener {
         ButterKnife.bind(this, view);
 
         String file = null;
-        Method method = null;
-
         Bundle bundle = this.getArguments();
         if (bundle != null) {
             file = bundle.getString(FILE_PATH_KEY);
@@ -96,9 +117,6 @@ public class EncodeFragment extends Fragment implements EncodeListener {
                 addProgressText("% компрессии = " + CompressQualifier.compressPercent(
                         new File(file),
                         new File(compressedTextFilename)) + "\n");
-//                addProgressText("Файлы идентичны = " + CompressQualifier.isUncompressedEqualsSource(
-//                        new File(file),
-//                        new File(decodedTextFilename)) + "\n");
 
                 break;
             case LZW:
@@ -112,11 +130,74 @@ public class EncodeFragment extends Fragment implements EncodeListener {
 
                 addProgressText("Разархивированный файл: " + newFile);
                 break;
+            case AES:
+                inputSection.setVisibility(View.VISIBLE);
+                break;
+            case RSA:
+                inputSection.setVisibility(View.VISIBLE);
+                break;
         }
+    }
+
+    @OnClick(R.id.btn_enter)
+    public void enterKey() {
+        clearProgress();
+        String key = keyEt.getText().toString();
+        String text = textEt.getText().toString();
+
+        if (method == Method.AES) {
+            testAES(key, text);
+        } else {
+            keySection.setVisibility(View.GONE);
+            try {
+                testRSA(text);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private void testAES(String key, String text) {
+        String encrypt = AES.encrypt(text, key);
+        String decrypt = AES.decrypt(encrypt, key);
+
+        addProgressText("\nЗаданый ключ:");
+        addProgressText(key);
+        addProgressText("\nИсходный текст:");
+        addProgressText(text);
+        addProgressText("\nЗашифрованный текст:");
+        addProgressText(encrypt);
+        addProgressText("\nРасшифрованный текст:");
+        addProgressText(decrypt);
+    }
+
+    private void testRSA(String text) throws Exception {
+        KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("RSA");
+        keyPairGenerator.initialize(4096);
+
+        KeyPair keyPair = keyPairGenerator.generateKeyPair();
+        PublicKey publicKey = keyPair.getPublic();
+        PrivateKey privateKey = keyPair.getPrivate();
+
+        addProgressText("\nИсходный текст:");
+        addProgressText(text);
+
+        byte[] cipherTextArray = RSA.encrypt(text, publicKey);
+        String encryptedText = Base64.getEncoder().encodeToString(cipherTextArray);
+        addProgressText("\nЗашифрованный текст:");
+        addProgressText(encryptedText);
+
+        String decryptedText = RSA.decrypt(cipherTextArray, privateKey);
+        addProgressText("\nРасшифрованный текст:");
+        addProgressText(decryptedText);
     }
 
     private void addProgressText(String text) {
         progressTv.setText(progressTv.getText()+ text + "\n");
+    }
+
+    private void clearProgress() {
+        progressTv.setText("");
     }
 
     @Override

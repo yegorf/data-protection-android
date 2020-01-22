@@ -16,4 +16,7 @@
     <string name="file_not_chosen">file not chosen</string>
     <string name="exit">exit</string>
     <string name="info">info</string>
+    <string name="key">key:</string>
+    <string name="go">go</string>
+    <string name="text">text:</string>
 </resources>
