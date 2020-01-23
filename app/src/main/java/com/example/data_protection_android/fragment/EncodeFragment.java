@@ -82,23 +82,69 @@ public class EncodeFragment extends Fragment implements EncodeListener {
             file = bundle.getString(FILE_PATH_KEY);
             method = (Method) bundle.getSerializable(METHOD_KEY);
             action = (Action) bundle.getSerializable(ACTION_KEY);
-            Toast.makeText(getContext(), action.name(), Toast.LENGTH_LONG).show();
         }
 
-        if (file != null && method != null) {
+        if (file != null && method != null && action != null) {
             setData(method, action);
             try {
-                start(file, method);
+                switch (action) {
+                    case DEMO:
+                        start(file, method);
+                        break;
+                    case ENCRYPT:
+                        encrypt(file, method);
+                        break;
+                    case DECRYPT:
+                        decrypt(file, method);
+                        break;
+                }
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
-
         return view;
     }
 
     private void setData(Method method, Action action) {
         methodTv.setText(method.name() + " " + action.name());
+    }
+
+    private void encrypt(String file, Method method) throws IOException {
+        switch (method) {
+            case HAFFMAN:
+                Toast.makeText(getContext(), "SORRY, ONLY DEMO", Toast.LENGTH_LONG).show();
+                break;
+            case LZW:
+                LzwCoder coder = new LzwCoder();
+                addProgressText("Архивация LZW");
+                String archive = coder.archive(file, this);
+                addProgressText("Архив создан: " + archive);
+                break;
+            case RSA:
+                keySection.setVisibility(View.GONE);
+            case AES:
+                inputSection.setVisibility(View.VISIBLE);
+                break;
+        }
+    }
+
+    private void decrypt(String file, Method method) throws IOException {
+        switch (method) {
+            case HAFFMAN:
+                Toast.makeText(getContext(), "SORRY, ONLY DEMO", Toast.LENGTH_LONG).show();
+                break;
+            case LZW:
+                LzwCoder coder = new LzwCoder();
+                addProgressText("Дерхивация LZW");
+                String newFile = coder.unzip(null, file);
+                addProgressText("Разархивированный файл: " + newFile);
+                break;
+            case RSA:
+                keySection.setVisibility(View.GONE);
+            case AES:
+                inputSection.setVisibility(View.VISIBLE);
+                break;
+        }
     }
 
     private void start(String file, Method method) throws IOException {

@@ -75,10 +75,19 @@ public class LzwCoder {
     }
 
     public String unzip(String fileName, String archive) throws IOException {
-        String[] split = fileName.split("/");
-        String file = split[split.length - 1];
+        String output;
 
-        String output = fileName.replace(file, "decoded_" + file);
+        if (fileName != null) {
+            String[] split = fileName.split("/");
+            String file = split[split.length - 1];
+            output = fileName.replace(file, "decoded_" + file);
+        } else {
+            output = archive.replace(".lzw", "");
+            String[] split = output.split("/");
+            String file = split[split.length - 1];
+            output = output.replace(file, "decoded_" + file);
+        }
+
         DataInputStream inputStream = new DataInputStream(new BufferedInputStream(new FileInputStream(archive)));
         DataOutputStream outputStream = new DataOutputStream(new BufferedOutputStream(new FileOutputStream(output)));
 
