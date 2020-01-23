@@ -96,13 +96,18 @@ public class MainActivity extends AppCompatActivity {
 
     private void startFragment(Action action) {
         Method method = null;
+        String file = chosenFileTv.getText().toString();
 
         switch (methodRg.getCheckedRadioButtonId()) {
             case R.id.rb_haffman:
-                method = Method.HAFFMAN;
+                if (!file.equals("file not chosen"))  {
+                    method = Method.HAFFMAN;
+                }
                 break;
             case R.id.rb_lzw:
-                method = Method.LZW;
+                if (!file.equals("file not chosen"))  {
+                    method = Method.LZW;
+                }
                 break;
             case R.id.rb_aes:
                 method = Method.AES;
@@ -112,7 +117,6 @@ public class MainActivity extends AppCompatActivity {
                 break;
         }
 
-        String file = chosenFileTv.getText().toString();
         if (method != null && file.length() != 0) {
             startFragment(file, method, action);
         } else {
