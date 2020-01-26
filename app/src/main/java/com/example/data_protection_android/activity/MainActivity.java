@@ -36,6 +36,8 @@ public class MainActivity extends AppCompatActivity {
 
     private final int FILE_REQUEST_CODE = 1;
     private int WRITE_PERMISSION = 1;
+    private final String ENCODE_FRAGMENT = "ENCODE_FRAGMENT";
+    private final String INFO_FRAGMENT = "INFO_FRAGMENT";
 
     @BindView(R.id.tv_chosen_file)
     TextView chosenFileTv;
@@ -100,12 +102,12 @@ public class MainActivity extends AppCompatActivity {
 
         switch (methodRg.getCheckedRadioButtonId()) {
             case R.id.rb_haffman:
-                if (!file.equals("file not chosen"))  {
+                if (!file.equals(getString(R.string.file_not_chosen)))  {
                     method = Method.HAFFMAN;
                 }
                 break;
             case R.id.rb_lzw:
-                if (!file.equals("file not chosen"))  {
+                if (!file.equals(getString(R.string.file_not_chosen)))  {
                     method = Method.LZW;
                 }
                 break;
@@ -144,7 +146,7 @@ public class MainActivity extends AppCompatActivity {
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction()
                 .replace(R.id.fragment_container, fragment)
-                .addToBackStack("ENCODE_FRAGMENT")
+                .addToBackStack(ENCODE_FRAGMENT)
                 .commit();
     }
 
@@ -153,7 +155,7 @@ public class MainActivity extends AppCompatActivity {
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction()
                 .replace(R.id.fragment_container, fragment)
-                .addToBackStack("INFO_FRAGMENT")
+                .addToBackStack(INFO_FRAGMENT)
                 .commit();
     }
 
