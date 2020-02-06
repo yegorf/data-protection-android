@@ -54,7 +54,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
         requestPermissions();
-        System.out.println("commit test");
     }
 
     private void requestPermissions() {
